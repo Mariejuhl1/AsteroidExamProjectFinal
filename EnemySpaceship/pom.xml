@@ -1,28 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>AsteroidsExam</artifactId>
-    <groupId>asteroids.exam</groupId>
-    <version>1.0.1-SNAPSHOT</version>
-  </parent>
-  <groupId>asteroids.exam</groupId>
-  <artifactId>EnemySpaceship</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>EnemySpaceship</name>
-    <dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>asteroids.exam</groupId>
+        <artifactId>AsteroidsExam</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>EnemySpaceship</artifactId>
+    <packaging>jar</packaging>
+    <dependencies> <!-- dependencies -->
         <dependency>
             <groupId>asteroids.exam</groupId>
             <artifactId>Common</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>asteroids.exam</groupId>
             <artifactId>CommonBullet</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

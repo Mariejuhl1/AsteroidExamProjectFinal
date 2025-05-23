@@ -1,69 +1,46 @@
 package asteroids.exam.common.util;
 
 import java.util.*;
-import java.lang.module.Configuration;
-import java.lang.module.ModuleDescriptor;
+import java.lang.module.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
-import java.lang.module.ModuleFinder;
-import java.lang.module.ModuleReference;
-
 
 public enum ServiceLocator {
 
     INSTANCE;
 
-    private static final Map<Class, ServiceLoader> loadermap = new HashMap<>();
+    private static final Map<Class<?>, ServiceLoader<?>> loaderMap = new HashMap<>();
     private final ModuleLayer layer;
 
     ServiceLocator() {
         try {
-            Path pluginsDir = Paths.get("plugins");
-
-            ModuleFinder pluginsFinder = ModuleFinder.of(pluginsDir);
-
-            List<String> plugins = pluginsFinder
-                    .findAll()
-                    .stream()
+            Path pluginsDir = Paths.get("plugins");      // plugin path
+            ModuleFinder finder = ModuleFinder.of(pluginsDir);
+            List<String> names = finder.findAll().stream()
                     .map(ModuleReference::descriptor)
                     .map(ModuleDescriptor::name)
                     .collect(Collectors.toList());
-
-            Configuration pluginsConfiguration = ModuleLayer
-                    .boot()
+            Configuration config = ModuleLayer.boot()
                     .configuration()
-                    .resolve(pluginsFinder, ModuleFinder.of(), plugins);
-
-            layer = ModuleLayer
-                    .boot()
-                    .defineModulesWithOneLoader(pluginsConfiguration, ClassLoader.getSystemClassLoader());
+                    .resolve(finder, ModuleFinder.of(), names);
+            layer = ModuleLayer.boot()
+                    .defineModulesWithOneLoader(config, ClassLoader.getSystemClassLoader());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-
     public <T> List<T> locateAll(Class<T> service) {
-        ServiceLoader<T> loader = loadermap.get(service);
-
+        ServiceLoader<T> loader = (ServiceLoader<T>) loaderMap.get(service);
         if (loader == null) {
             loader = ServiceLoader.load(layer, service);
-            loadermap.put(service, loader);
+            loaderMap.put(service, loader);
         }
-
-        List<T> list = new ArrayList<T>();
-
-        if (loader != null) {
-            try {
-                for (T instance : loader) {
-                    list.add(instance);
-                }
-            } catch (ServiceConfigurationError serviceError) {
-                serviceError.printStackTrace();
-            }
+        List<T> list = new ArrayList<>();
+        for (T inst : loader) {
+            list.add(inst);                             // collect implementations
         }
-
         return list;
     }
 }

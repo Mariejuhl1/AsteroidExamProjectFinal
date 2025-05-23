@@ -18,46 +18,40 @@ public class EnemySpaceshipSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity enemySpaceship : world.getEntities(EnemySpaceship.class)) {
+        for (Entity enemy : world.getEntities(EnemySpaceship.class)) { // each enemy
+            PositionPart pos = enemy.getPart(PositionPart.class);
+            if (pos == null) continue;
 
-            PositionPart position = enemySpaceship.getPart(PositionPart.class);
-
+            // occasionally change direction
             if (random.nextDouble() < 0.05) {
-                position.setRotation(random.nextInt(360));
+                pos.setRotation(random.nextInt(360));     // random rotation
             }
 
-            double changeX = Math.cos(Math.toRadians(position.getRotation()));
-            double changeY = Math.sin(Math.toRadians(position.getRotation()));
-            position.setX(position.getX() + changeX);
-            position.setY(position.getY() + changeY);
+            // move forward
+            double dx = Math.cos(Math.toRadians(pos.getRotation()));
+            double dy = Math.sin(Math.toRadians(pos.getRotation()));
+            pos.setX(pos.getX() + dx);
+            pos.setY(pos.getY() + dy);
 
-            if (position.getX() < 0) {
-                position.setX(1);
-            }
-            if (position.getX() > gameData.getDisplayWidth()) {
-                position.setX(gameData.getDisplayWidth() - 1);
-            }
-            if (position.getY() < 0) {
-                position.setY(1);
-            }
-            if (position.getY() > gameData.getDisplayHeight()) {
-                position.setY(gameData.getDisplayHeight() - 1);
-            }
+            // keep inside screen bounds
+            if (pos.getX() < 0) pos.setX(1);
+            if (pos.getX() > gameData.getDisplayWidth()) pos.setX(gameData.getDisplayWidth() - 1);
+            if (pos.getY() < 0) pos.setY(1);
+            if (pos.getY() > gameData.getDisplayHeight()) pos.setY(gameData.getDisplayHeight() - 1);
+
+            // sometimes shoot a bullet
             if (random.nextDouble() < 0.03) {
-                shootBullet(enemySpaceship, gameData, world);
-            }
-        }
-    }
-    private void shootBullet(Entity enemySpaceship, GameData gameData, World world) {
-        for (BulletSPI bulletSPI : getBulletSPIs()) {
-            Entity bullet = bulletSPI.createBullet(enemySpaceship, gameData);
-            if (bullet != null) {
-                world.addEntity(bullet);
+                shootBullet(enemy, gameData, world);
             }
         }
     }
 
-    private Collection<? extends BulletSPI> getBulletSPIs() {
-        return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+    private void shootBullet(Entity enemy, GameData gameData, World world) {
+        for (BulletSPI spi : ServiceLoader.load(BulletSPI.class)) { // find all bullet SPIs
+            Entity bullet = spi.createBullet(enemy, gameData);
+            if (bullet != null) {
+                world.addEntity(bullet);                  // add the bullet
+            }
+        }
     }
 }

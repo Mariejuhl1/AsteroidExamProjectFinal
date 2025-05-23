@@ -8,20 +8,17 @@ import asteroids.exam.common.services.IGamePluginService;
 
 public class BulletPlugin implements IGamePluginService {
 
-    private Entity bullet;
-
     @Override
     public void start(GameData gameData, World world) {
-
+        // nothing to start here
     }
 
     @Override
     public void stop(GameData gameData, World world) {
         for (Entity e : world.getEntities()) {
-            if (e.getClass() == Bullet.class) {
-                world.removeEntity(e);
+            if (e.getClass() == Bullet.class) {   // find bullets
+                world.removeEntity(e);           // remove each bullet
             }
         }
     }
-
 }

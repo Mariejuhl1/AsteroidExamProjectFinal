@@ -19,9 +19,9 @@ class ModuleConfig {
     @Bean
     public Game game() {
         return new Game(
-                gamePluginServices(),
-                entityProcessingServiceList(),
-                postEntityProcessingServices(scoreService(restTemplate()))
+                gamePluginServices(),                        // load plugins
+                entityProcessingServiceList(),               // load processors
+                postEntityProcessingServices(scoreService(restTemplate())) // load post-processors
         );
     }
 
@@ -37,12 +37,12 @@ class ModuleConfig {
 
     @Bean
     public RestTemplate restTemplate() {
-        return new RestTemplate();
+        return new RestTemplate();                     // for ScoreClient
     }
 
     @Bean
     public ScoreService scoreService(RestTemplate restTemplate) {
-        return new ScoreClient(restTemplate);
+        return new ScoreClient(restTemplate);          // inject REST client
     }
 
     @Bean
@@ -51,7 +51,7 @@ class ModuleConfig {
                 .stream()
                 .peek(svc -> {
                     if (svc instanceof CollisionDetector) {
-                        ((CollisionDetector) svc).setScoreService(scoreService);
+                        ((CollisionDetector) svc).setScoreService(scoreService); // wire score
                     }
                 })
                 .collect(toList());

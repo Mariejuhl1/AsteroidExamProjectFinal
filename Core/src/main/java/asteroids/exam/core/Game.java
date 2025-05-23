@@ -47,16 +47,16 @@ class Game {
         Scene scene = new Scene(gameWindow);
 
         scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.LEFT) gameData.getKeys().setKey(GameKeys.LEFT, true);
-            if (event.getCode() == KeyCode.RIGHT) gameData.getKeys().setKey(GameKeys.RIGHT, true);
-            if (event.getCode() == KeyCode.UP) gameData.getKeys().setKey(GameKeys.UP, true);
+            if (event.getCode() == KeyCode.W)    gameData.getKeys().setKey(GameKeys.W, true);
+            if (event.getCode() == KeyCode.A)    gameData.getKeys().setKey(GameKeys.A, true);
+            if (event.getCode() == KeyCode.D)    gameData.getKeys().setKey(GameKeys.D, true);
             if (event.getCode() == KeyCode.SPACE) gameData.getKeys().setKey(GameKeys.SPACE, true);
         });
 
         scene.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.LEFT) gameData.getKeys().setKey(GameKeys.LEFT, false);
-            if (event.getCode() == KeyCode.RIGHT) gameData.getKeys().setKey(GameKeys.RIGHT, false);
-            if (event.getCode() == KeyCode.UP) gameData.getKeys().setKey(GameKeys.UP, false);
+            if (event.getCode() == KeyCode.W)    gameData.getKeys().setKey(GameKeys.W, false);
+            if (event.getCode() == KeyCode.A)    gameData.getKeys().setKey(GameKeys.A, false);
+            if (event.getCode() == KeyCode.D)    gameData.getKeys().setKey(GameKeys.D, false);
             if (event.getCode() == KeyCode.SPACE) gameData.getKeys().setKey(GameKeys.SPACE, false);
         });
 
@@ -79,9 +79,9 @@ class Game {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
-                draw();
-                gameData.getKeys().update();
+                update();        // run game logic
+                draw();          // update visuals
+                gameData.getKeys().update(); // update key states
             }
         }.start();
     }
@@ -96,6 +96,7 @@ class Game {
     }
 
     private void draw() {
+        // remove shapes for entities that no longer exist
         for (Entity entity : shapes.keySet()) {
             if (!world.getEntities().contains(entity)) {
                 Polygon removed = shapes.remove(entity);
@@ -103,19 +104,19 @@ class Game {
             }
         }
 
+        // draw or update remaining entities
         for (Entity entity : world.getEntities()) {
             Polygon shape = shapes.get(entity);
             if (shape == null) {
-                shape = new Polygon(entity.getPolygonCoordinates());
+                shape = new Polygon(entity.getPolygonCoordinates()); // create shape if new
                 shapes.put(entity, shape);
                 gameWindow.getChildren().add(shape);
             }
-
-            PositionPart position = entity.getPart(PositionPart.class);
-            if (position != null) {
-                shape.setTranslateX(position.getX());
-                shape.setTranslateY(position.getY());
-                shape.setRotate(position.getRotation());
+            PositionPart pos = entity.getPart(PositionPart.class);
+            if (pos != null) {
+                shape.setTranslateX(pos.getX());    // position X
+                shape.setTranslateY(pos.getY());    // position Y
+                shape.setRotate(pos.getRotation()); // rotation
             }
         }
     }

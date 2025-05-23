@@ -4,5 +4,6 @@ import asteroids.exam.common.data.Entity;
 import asteroids.exam.common.data.GameData;
 
 public interface BulletSPI {
-    Entity createBullet(Entity e, GameData gameData);
+    // create a new bullet based on the shooter’s state
+    Entity createBullet(Entity shooter, GameData gameData);
 }

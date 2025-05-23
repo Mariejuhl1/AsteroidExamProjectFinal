@@ -13,11 +13,11 @@ public interface IEntityProcessingService {
      *
      * @param gameData the current game data (inputs, display size, etc.).
      * @param world the world containing all game entities.
-     *
+
      * Preconditions:
      * - gameData and world are initialized and not null.
      * - The world contains zero or more entities.
-     *
+
      * Postconditions:
      * - The state of relevant entities has been updated.
      */

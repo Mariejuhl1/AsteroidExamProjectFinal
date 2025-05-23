@@ -8,39 +8,39 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class World {
 
-    private final Map<String, Entity> entityMap = new ConcurrentHashMap<>();
+    private final Map<String, Entity> entityMap = new ConcurrentHashMap<>(); // entities
 
     public String addEntity(Entity entity) {
-        entityMap.put(entity.getID(), entity);
+        entityMap.put(entity.getID(), entity);            // add to world
         return entity.getID();
     }
 
     public void removeEntity(String entityID) {
-        entityMap.remove(entityID);
+        entityMap.remove(entityID);                       // remove by ID
     }
 
     public void removeEntity(Entity entity) {
-        entityMap.remove(entity.getID());
+        entityMap.remove(entity.getID());                 // remove by instance
     }
 
     public Collection<Entity> getEntities() {
-        return entityMap.values();
+        return entityMap.values();                        // all entities
     }
 
-    public <E extends Entity> List<Entity> getEntities(Class<E>... entityTypes) {
-        List<Entity> r = new ArrayList<>();
+    @SafeVarargs
+    public final <E extends Entity> List<Entity> getEntities(Class<E>... types) {
+        List<Entity> result = new ArrayList<>();
         for (Entity e : getEntities()) {
-            for (Class<E> entityType : entityTypes) {
-                if (entityType.equals(e.getClass())) {
-                    r.add(e);
+            for (Class<E> t : types) {
+                if (e.getClass().equals(t)) {
+                    result.add(e);                        // filter by type
                 }
             }
         }
-        return r;
+        return result;
     }
 
     public Entity getEntity(String ID) {
-        return entityMap.get(ID);
+        return entityMap.get(ID);                        // lookup by ID
     }
-
 }

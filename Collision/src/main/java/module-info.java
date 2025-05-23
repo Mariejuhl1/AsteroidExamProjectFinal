@@ -6,6 +6,6 @@ module Collision {
     requires CommonBullet;
 
     uses asteroids.exam.commonasteroids.IAsteroidSplitter;
-
-    provides asteroids.exam.common.services.IPostEntityProcessingService with asteroids.exam.collision.CollisionDetector;
+    provides asteroids.exam.common.services.IPostEntityProcessingService
+            with asteroids.exam.collision.CollisionDetector;
 }

@@ -2,30 +2,27 @@ package asteroids.exam.common.data;
 
 public class GameData {
 
-    private int displayWidth  = 840;
-    private int displayHeight = 640;
-    private final GameKeys keys = new GameKeys();
-
+    private int displayWidth  = 840;                      // default width
+    private int displayHeight = 640;                      // default height
+    private final GameKeys keys = new GameKeys();         // input state
 
     public GameKeys getKeys() {
-        return keys;
+        return keys;                                      // access keys
     }
 
     public void setDisplayWidth(int width) {
-        this.displayWidth = width;
+        this.displayWidth = width;                        // change width
     }
 
     public void setDisplayHeight(int height) {
-        this.displayHeight = height;
+        this.displayHeight = height;                      // change height
     }
 
     public int getDisplayWidth() {
-        return displayWidth;
+        return displayWidth;                              // current width
     }
 
     public int getDisplayHeight() {
-        return displayHeight;
+        return displayHeight;                             // current height
     }
-
-
 }

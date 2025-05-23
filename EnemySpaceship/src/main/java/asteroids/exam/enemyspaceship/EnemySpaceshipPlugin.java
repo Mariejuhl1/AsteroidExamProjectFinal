@@ -15,33 +15,32 @@ public class EnemySpaceshipPlugin implements IGamePluginService {
     private final Random random = new Random();
     private Entity spaceship;
 
-    public EnemySpaceshipPlugin() {
-    }
-
     @Override
     public void start(GameData gameData, World world) {
-        spaceship = generateEnemy(gameData);
-        world.addEntity(spaceship);
+        spaceship = generateEnemy(gameData);            // create a new enemy
+        world.addEntity(spaceship);                     // add to the world
     }
 
     @Override
     public void stop(GameData gameData, World world) {
-        world.removeEntity(spaceship);
+        world.removeEntity(spaceship);                  // remove the enemy
     }
 
     private Entity generateEnemy(GameData gameData) {
-        Entity enemy = new EnemySpaceship();
+        Entity enemy = new EnemySpaceship();            // new enemy entity
 
-        float posX = random.nextFloat(gameData.getDisplayWidth());
-        float posY = random.nextFloat(gameData.getDisplayHeight());
+        // random starting position
+        float posX = random.nextFloat() * gameData.getDisplayWidth();
+        float posY = random.nextFloat() * gameData.getDisplayHeight();
 
-        enemy.setRadius(8);
-        enemy.setPolygonCoordinates(-5, -5, 10, 0, -5, 5);
+        enemy.setRadius(8);                             // set collision radius
+        enemy.setPolygonCoordinates(-5, -5, 10, 0, -5, 5); // set shape
 
+        // add initial position and rotation
         enemy.add(PositionPart.class, new PositionPart(posX, posY, 0));
-        enemy.add(LifePart.class, new LifePart(10));
-        enemy.add(TypePart.class, new TypePart(TypePart.EntityType.ENEMY));
+        enemy.add(LifePart.class, new LifePart(10));    // set life count
+        enemy.add(TypePart.class, new TypePart(TypePart.EntityType.ENEMY)); // set type
 
-        return enemy;
+        return enemy;                                   // return the configured enemy
     }
 }

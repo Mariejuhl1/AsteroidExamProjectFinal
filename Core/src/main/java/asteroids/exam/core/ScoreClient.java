@@ -9,13 +9,15 @@ public class ScoreClient implements ScoreService {
     private final String baseUrl = "http://localhost:8080/scores";
 
     public ScoreClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+        this.restTemplate = restTemplate;            // store template
     }
 
     @Override
     public void submitScore(int value) {
         try {
-            Integer id = restTemplate.postForObject(baseUrl + "?value={value}", null, Integer.class, value);
+            Integer id = restTemplate.postForObject(
+                    baseUrl + "?value={value}", null, Integer.class, value
+            );                                         // send score
             System.out.println("Score submitted, id=" + id);
         } catch (Exception e) {
             System.err.println("Error submitting score: " + e.getMessage());
